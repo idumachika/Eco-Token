@@ -41,3 +41,13 @@
             (map-set balances {owner: (var-get charity-wallet)} {balance: (+ (unwrap! (map-get? balances {owner: (var-get charity-wallet)}) {balance: 0}) amount)})
             (ok amount))))
 
+;; Allocate funds to hospitals/research centers (only admin)
+(define-public (allocate-funds (recipient principal) (amount uint))
+    (let ((charity-balance (unwrap! (map-get? balances {owner: (var-get charity-wallet)}) {balance: 0})))
+        (begin
+            (asserts! (is-eq tx-sender (var-get admin)) (err "Only admin can allocate"))
+            (asserts! (>= charity-balance amount) (err "Insufficient funds in charity wallet"))
+            (map-set balances {owner: (var-get charity-wallet)} {balance: (- charity-balance amount)})
+            (map-set balances {owner: recipient} {balance: (+ (unwrap! (map-get? balances {owner: recipient}) {balance: 0}) amount)})
+            (ok amount))))
+
