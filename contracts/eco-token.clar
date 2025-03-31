@@ -28,3 +28,16 @@
             (map-set balances {owner: to} {balance: (+ (unwrap! (map-get? balances {owner: to}) {balance: 0}) amount)})
             (ok amount))))
 
+            ;; Get balance
+(define-read-only (get-balance (who principal))
+    (unwrap! (map-get? balances {owner: who}) {balance: 0}))
+
+;; Donate tokens to the charity wallet
+(define-public (donate (amount uint))
+    (let ((sender-balance (unwrap! (map-get? balances {owner: tx-sender}) {balance: 0})))
+        (begin
+            (asserts! (>= sender-balance amount) (err "Insufficient balance"))
+            (map-set balances {owner: tx-sender} {balance: (- sender-balance amount)})
+            (map-set balances {owner: (var-get charity-wallet)} {balance: (+ (unwrap! (map-get? balances {owner: (var-get charity-wallet)}) {balance: 0}) amount)})
+            (ok amount))))
+
