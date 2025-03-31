@@ -86,7 +86,7 @@ The smart contract is built using the **Clarity** language and includes the foll
 This project is licensed under the **MIT License**. See the `LICENSE` file for details.
 
 ## Contributors
-- **Your Name** (GitHub: [@yourusername](https://github.com/idumachika))
+- **Your Name** (GitHub: [@idumachika](https://github.com/idumachika))
 
 ## Contact
 For any inquiries, reach out via email: `idumachika@gmail.com` or open an issue on GitHub.
