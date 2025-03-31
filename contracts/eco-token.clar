@@ -50,4 +50,12 @@
             (map-set balances {owner: (var-get charity-wallet)} {balance: (- charity-balance amount)})
             (map-set balances {owner: recipient} {balance: (+ (unwrap! (map-get? balances {owner: recipient}) {balance: 0}) amount)})
             (ok amount))))
+            
+;; Governance - Token holders can vote on fund allocation
+(define-public (vote (proposal (buff 50)) (vote-weight uint))
+    (let ((sender-balance (unwrap! (map-get? balances {owner: tx-sender}) {balance: 0})))
+        (begin
+            (asserts! (>= sender-balance vote-weight) (err "Not enough tokens to vote"))
+            (map-set votes {proposal: proposal} {votes: (+ (unwrap! (map-get? votes {proposal: proposal}) {votes: 0}) vote-weight)})
+            (ok vote-weight))))
 
